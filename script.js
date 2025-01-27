@@ -1,6 +1,7 @@
 let nameError = document.getElementById("name-error");
 let emailError = document.getElementById("email-error");
 let passwordError = document.getElementById("password-error");
+let confirmPasswordError = document.getElementById("confirm-password-error");
 let submitError = document.getElementById("submit-error");
 
 function validateName() {
@@ -40,7 +41,35 @@ function validatePassword() {
         passwordError.innerHTML = "Password is required";
         return false;
     }
+    if (password.length < 8) {
+        passwordError.innerHTML = "Password must be at least 8 characters";
+        return false;
+    }
+    if (!password.match(/[0-9]/)) {
+        passwordError.innerHTML = "Password must contain at least 1 number";
+        return false;
+    }
+    if (!password.match(/[!@#$%^&*]/)) {
+        passwordError.innerHTML = "Password must contain at least 1 special character";
+        return false;
+    }
     passwordError.innerHTML = "";
+    return true;
+}
+
+function validateConfirmPassword() {
+    let password = document.getElementById("contact-password").value;
+    let confirmPassword = document.getElementById("confirm-password").value;
+
+    if (confirmPassword.length === 0) {
+        confirmPasswordError.innerHTML = "Confirm Password is required";
+        return false;
+    }
+    if (password !== confirmPassword) {
+        confirmPasswordError.innerHTML = "Passwords do not match";
+        return false;
+    }
+    confirmPasswordError.innerHTML = "";
     return true;
 }
 
@@ -48,10 +77,11 @@ function validateForm() {
     let isNameValid = validateName();
     let isEmailValid = validateEmail();
     let isPasswordValid = validatePassword();
+    let isConfirmPasswordValid = validateConfirmPassword();
 
-    if (isNameValid && isEmailValid && isPasswordValid) {
+    if (isNameValid && isEmailValid && isPasswordValid && isConfirmPasswordValid) {
         openPopup();
-        return false; 
+        return false;
     } else {
         submitError.innerHTML = "Please fix the errors above to submit";
         return false;
@@ -66,4 +96,5 @@ function openPopup() {
 
 function closePopup() {
     popup.style.display = "none";
+    document.getElementById("myform").reset(); 
 }
